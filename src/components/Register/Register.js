@@ -53,7 +53,13 @@ export default function Register() {
   });
 
   useEffect(() => {
-    history.push('/');
+    if (user) {
+      if (lastLocation === null || lastLocation.pathname === '/login') {
+        history.push('/');
+      } else {
+        history.goBack();
+      }
+    }
   }, [user, history, lastLocation]);
 
   // const fileSelectHandler = (e) => {
