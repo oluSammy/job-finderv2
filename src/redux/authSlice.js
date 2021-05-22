@@ -49,7 +49,7 @@ export const uploadResume = createAsyncThunk(
         },
       };
 
-      const data = await axios({
+      await axios({
         method: 'post',
         url: `${baseUrl}/users/resume`,
         data: formData,
