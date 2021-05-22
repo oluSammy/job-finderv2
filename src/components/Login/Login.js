@@ -31,12 +31,7 @@ export default function Login() {
 
   useEffect(() => {
     if (user) {
-      if (lastLocation === null || lastLocation.pathname === '/login') {
-        history.push('/');
-      } else {
-        history.goBack();
-      }
-      // history.goBack();
+      history.push('/');
     }
   }, [user, history, lastLocation]);
 
@@ -53,14 +48,13 @@ export default function Login() {
 
   return (
     <motion.div
-    initial="out"
-    animate="in"
-    exit="out"
-    variants={pageTransition}
-    transition={transit}
+      initial='out'
+      animate='in'
+      exit='out'
+      variants={pageTransition}
+      transition={transit}
     >
-      <Container
-      component='main' maxWidth='xs'>
+      <Container component='main' maxWidth='xs'>
         <CssBaseline />
 
         <div className={classes.paper}>
@@ -123,8 +117,15 @@ export default function Login() {
             </Grid>
           </form>
           {isLoggingIn ? (
-            <Backdrop className={classes.backdrop} open={true} style={{zIndex: 9999999}}>
-              <CircularProgress className={classes.backdrop} style={{color: '#ffffff'}} />
+            <Backdrop
+              className={classes.backdrop}
+              open={true}
+              style={{ zIndex: 9999999 }}
+            >
+              <CircularProgress
+                className={classes.backdrop}
+                style={{ color: '#ffffff' }}
+              />
             </Backdrop>
           ) : (
             ''
