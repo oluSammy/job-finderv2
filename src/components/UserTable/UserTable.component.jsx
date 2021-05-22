@@ -16,6 +16,9 @@ import CheckCircleOutlinedIcon from '@material-ui/icons/CheckCircleOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import { pageTransition, transit } from '../../utils/animate';
 import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../../redux/authSlice';
+import { suspendUser } from '../../redux/userslice';
 
 
 
@@ -24,15 +27,18 @@ function createData(name, email, role, status, actionIcon ,id, isActive ) {
 }
 
 const UserTable = ({ allUsers }) => {
-  console.log(allUsers);
   const classes = tableStyles();
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser)
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
  const newRows = allUsers.map(data => {
-   const { name, email, role, isActive, _id } = data;
-   return createData(name, email, role, isActive === true ? 'active' : 'suspended', _id, isActive)
+   let { name, email, role, isActive } = data;
+   const id = data._id
+  name = `${name}_${id}`
+   return createData(name, email, role, isActive === true ? 'active' : 'suspended', id, isActive)
  })
 
   // const handleClick = (event) => {
@@ -66,7 +72,7 @@ const UserTable = ({ allUsers }) => {
             <TableRow key={row.name}>
               <TableCell className={clsx(classes.tableCell, classes.tablePadding,)} component="th" scope="row">
                 <div className={classes.dotCell}>
-                  {row.name}
+                  {row.name.split('_')[0]}
                 </div>
               </TableCell>
               <TableCell className={clsx(classes.tableCell, classes.tablePadding) } align="justify">{row.email}</TableCell>
@@ -78,6 +84,7 @@ const UserTable = ({ allUsers }) => {
                   aria-label="more"
                   aria-controls="long-menu"
                   aria-haspopup="true"
+                  onClick={() => {dispatch(suspendUser({ id: row.name.split('_')[1], token: user.token }))}}
                 >
                   {row.isActive ?  <CheckCircleOutlinedIcon className={tableStyles.deleteIcon} />
                   : <CancelOutlinedIcon className={tableStyles.deleteIcon} />}

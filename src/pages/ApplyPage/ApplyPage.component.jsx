@@ -48,7 +48,6 @@ const ApplyPage = () => {
     if (!job) {
       dispatch(getJobById(jobId));
     }
-    console.log(user)
   }, [history, dispatch, jobId, job, user])
 
   const handleSubmit = e => {

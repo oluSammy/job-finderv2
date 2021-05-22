@@ -27,7 +27,6 @@ export const signUp = createAsyncThunk(
 
       return user;
     } catch (err) {
-      console.log(err);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -56,10 +55,8 @@ export const uploadResume = createAsyncThunk(
         data: formData,
         config
       })
-      console.log('hello');
-      console.log(data);
+
     } catch (error) {
-      console.log(error);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -75,9 +72,7 @@ export const uploadResume = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   'user/update',
   async ({ token, data, id }, { rejectWithValue }) => {
-    console.log(data);
-    console.log(data);
-    console.log(data);
+
     try {
       const newUser = await axios({
         method: 'put',
@@ -95,11 +90,10 @@ export const updateUser = createAsyncThunk(
         confirmButtonColor: '#E94368',
       });
 
-      console.log(newUser.data);
 
       return newUser.data;
     } catch (error) {
-      console.log(error);
+
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -133,7 +127,6 @@ export const userSlice = createSlice({
       state.user = null;
     },
     setNewUser: (state, { payload }) => {
-      console.log(payload);
       let formerUser = JSON.parse(localStorage.getItem('user'));
       console.log(formerUser);
       formerUser.user = payload.data;

@@ -17,7 +17,9 @@ const ManageUsers = () => {
   const isGettingUsers = useSelector(selectIsGettingAllUsers)
 
   useEffect(() => {
-    dispatch(getAllUsers(user.token))
+    if (user) {
+      dispatch(getAllUsers(user.token))
+    }
     // console.log(allUsers)
   }, [dispatch, user])
 

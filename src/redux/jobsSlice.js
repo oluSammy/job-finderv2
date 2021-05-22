@@ -87,10 +87,10 @@ export const getJobById = createAsyncThunk(
         method: 'get',
         url: `${baseUrl}/jobs/${id}`,
       });
-      console.log(job.data.data);
+
       return job.data.data;
     } catch (error) {
-      console.log(error);
+
       return rejectWithValue(error);
     }
   }
@@ -100,7 +100,7 @@ export const updateJob = createAsyncThunk(
   'jobs/update',
   async ({ id, data, token }, { rejectWithValue }) => {
     try {
-      console.log(data, id, token);
+
       const job = await axios({
         method: 'put',
         url: `${baseUrl}/jobs/${id}`,
@@ -245,7 +245,6 @@ export const jobsSlice = createSlice({
     [deleteJob.fulfilled]: (state, { payload: { data, id } }) => {
       state.isDeletingJobs = false;
       state.deleteErr = null;
-      console.log(data);
       const jobId = state.authorJobs.findIndex((job) => job._id === id);
       state.authorJobs.splice(jobId, 1);
     },

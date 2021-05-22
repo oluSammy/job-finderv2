@@ -35,7 +35,6 @@ export const apply = createAsyncThunk(
 
       return application;
     } catch (error) {
-      console.log(error);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

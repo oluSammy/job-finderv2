@@ -12,7 +12,6 @@ const Hero = () => {
 
   const handleChange = e => {
     setQuery(e.target.value)
-    console.log(query);
   }
 
   const handleSearch = e => {
