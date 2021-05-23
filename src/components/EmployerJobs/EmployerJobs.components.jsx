@@ -101,8 +101,7 @@ const EmployerJobs = ({ job }) => {
             <p className={classes.listTxt}>Delete</p>
           </MenuItem>
           {
-          <MenuItem component={Link} to={`/dashboard/applications/${_id}`} onClick={handleClose}
-            disabled={noOfApplications > 1 ? false : true}>
+          <MenuItem component={Link} to={`/dashboard/applications/${_id}`} onClick={handleClose}>
             <ListItemIcon>
                 <ViewListIcon className={classes.menuIcon} fontSize="small" />
             </ListItemIcon>
