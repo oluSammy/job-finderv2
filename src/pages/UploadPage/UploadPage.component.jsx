@@ -11,6 +11,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { pageTransition, transit } from '../../utils/animate';
 import { motion } from 'framer-motion';
+import config from '../../config';
 
 
 
@@ -66,7 +67,7 @@ const UploadPage = () => {
     setIsUploading(true);
     axios({
       method: "post",
-      url: "https://group-e-jobfinder-api.herokuapp.com/api/v1/users/resume",
+      url: `${config.url}/users/resume`,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

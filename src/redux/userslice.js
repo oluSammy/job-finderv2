@@ -1,8 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import config from "../config";
 // import Swal from 'sweetalert2';
 
-const baseUrl = 'https://group-e-jobfinder-api.herokuapp.com/api/v1';
+const baseUrl = config.url;
 
 const initialState = {
   allUsers: null,
@@ -14,11 +15,11 @@ const initialState = {
 };
 
 export const getAllUsers = createAsyncThunk(
-  'users/getAllUsers',
+  "users/getAllUsers",
   async (token, { rejectWithValue, dispatch }) => {
     try {
       const allUsers = await axios({
-        method: 'get',
+        method: "get",
         url: `${baseUrl}/admin/get-users`,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -30,21 +31,21 @@ export const getAllUsers = createAsyncThunk(
       return rejectWithValue(error);
     }
   }
-  );
+);
 
-  export const suspendUser = createAsyncThunk(
-    'users/suspendUsers',
-    async ({ token, id }, { rejectWithValue, dispatch }) => {
+export const suspendUser = createAsyncThunk(
+  "users/suspendUsers",
+  async ({ token, id }, { rejectWithValue, dispatch }) => {
     try {
       const suspendedUser = await axios({
-        method: 'put',
+        method: "put",
         url: `${baseUrl}/admin/suspend-user/${id}`,
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      dispatch(getAllUsers(token))
+      dispatch(getAllUsers(token));
       return suspendedUser;
     } catch (error) {
       return rejectWithValue(error);
@@ -53,13 +54,11 @@ export const getAllUsers = createAsyncThunk(
 );
 
 export const usersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
 
   reducers: {
-    setNewUsers: (state, {payload}) => {
-
-    }
+    setNewUsers: (state, { payload }) => {},
   },
 
   extraReducers: {
@@ -79,7 +78,7 @@ export const usersSlice = createSlice({
     [suspendUser.pending]: (state) => {
       state.isSuspendingUser = true;
       state.suspendUserErrMsg = null;
-      state.suspendedUser = null
+      state.suspendedUser = null;
     },
     [suspendUser.fulfilled]: (state, { payload }) => {
       state.isSuspendingUser = false;
@@ -92,7 +91,7 @@ export const usersSlice = createSlice({
       state.isSuspendingUser = true;
       state.suspendedUser = null;
       state.suspendUserErrMsg = error;
-    }
+    },
   },
 });
 

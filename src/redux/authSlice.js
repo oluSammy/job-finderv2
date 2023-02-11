@@ -1,26 +1,27 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from "../config";
 
-const baseUrl = 'https://group-e-jobfinder-api.herokuapp.com/api/v1';
+const baseUrl = config.url;
 
 export const signUp = createAsyncThunk(
-  'user/signup',
+  "user/signup",
   async ({ data, auth }) => {
     // console.log(data);
     let url;
-    auth === 'signup'
+    auth === "signup"
       ? (url = `${baseUrl}/auth/signup`)
       : (url = `${baseUrl}/auth/login`);
 
     let msg;
-    auth === 'signup'
-      ? (msg = 'Something went wrong!')
-      : (msg = 'Invalid email or password');
+    auth === "signup"
+      ? (msg = "Something went wrong!")
+      : (msg = "Invalid email or password");
 
     try {
       const user = await axios({
-        method: 'post',
+        method: "post",
         url,
         data,
       });
@@ -28,41 +29,40 @@ export const signUp = createAsyncThunk(
       return user;
     } catch (err) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        icon: "error",
+        title: "Oops...",
         text: `${msg}`,
-        confirmButtonColor: '#11365F',
-        cancelButtonColor: '#11365F',
+        confirmButtonColor: "#11365F",
+        cancelButtonColor: "#11365F",
       });
     }
   }
 );
 
 export const uploadResume = createAsyncThunk(
-  'user/resume',
+  "user/resume",
   async ({ token, formData }, { rejectWithValue, dispatch }) => {
     try {
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       };
 
       await axios({
-        method: 'post',
+        method: "post",
         url: `${baseUrl}/users/resume`,
         data: formData,
-        config
-      })
-
+        config,
+      });
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        icon: "error",
+        title: "Oops...",
         text: `could not upload cv`,
-        confirmButtonColor: '#11365F',
-        cancelButtonColor: '#11365F',
+        confirmButtonColor: "#11365F",
+        cancelButtonColor: "#11365F",
       });
       return rejectWithValue(error);
     }
@@ -70,12 +70,11 @@ export const uploadResume = createAsyncThunk(
 );
 
 export const updateUser = createAsyncThunk(
-  'user/update',
+  "user/update",
   async ({ token, data, id }, { rejectWithValue }) => {
-
     try {
       const newUser = await axios({
-        method: 'put',
+        method: "put",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -84,22 +83,20 @@ export const updateUser = createAsyncThunk(
       });
 
       Swal.fire({
-        icon: 'success',
-        title: 'Done!',
-        text: 'Profile Updated',
-        confirmButtonColor: '#E94368',
+        icon: "success",
+        title: "Done!",
+        text: "Profile Updated",
+        confirmButtonColor: "#E94368",
       });
-
 
       return newUser.data;
     } catch (error) {
-
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        icon: "error",
+        title: "Oops...",
         text: `could not update profile`,
-        confirmButtonColor: '#11365F',
-        cancelButtonColor: '#11365F',
+        confirmButtonColor: "#11365F",
+        cancelButtonColor: "#11365F",
       });
       return rejectWithValue(error);
     }
@@ -108,7 +105,7 @@ export const updateUser = createAsyncThunk(
 
 const initialState = {
   isLoggingIn: false,
-  user: JSON.parse(localStorage.getItem('user')) || null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   error: null,
   isUploading: false,
   newUser: null,
@@ -118,20 +115,20 @@ const initialState = {
 };
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
 
   reducers: {
     logout: (state) => {
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
       state.user = null;
     },
     setNewUser: (state, { payload }) => {
-      let formerUser = JSON.parse(localStorage.getItem('user'));
+      let formerUser = JSON.parse(localStorage.getItem("user"));
       console.log(formerUser);
       formerUser.user = payload.data;
       state.user = formerUser;
-      localStorage.setItem('user', JSON.stringify(formerUser));
+      localStorage.setItem("user", JSON.stringify(formerUser));
     },
   },
 
@@ -143,9 +140,9 @@ export const userSlice = createSlice({
       state.isLoggingIn = false;
       if (payload) {
         // console.log(payload);
-        localStorage.setItem('user', JSON.stringify(payload.data.data));
+        localStorage.setItem("user", JSON.stringify(payload.data.data));
       }
-      state.user = JSON.parse(localStorage.getItem('user'));
+      state.user = JSON.parse(localStorage.getItem("user"));
       state.error = null;
     },
     [signUp.rejected]: (state, { error }) => {
@@ -169,11 +166,11 @@ export const userSlice = createSlice({
     },
     [updateUser.fulfilled]: (state, { payload }) => {
       state.isUpdatingUser = false;
-      let formerUser = JSON.parse(localStorage.getItem('user'));
+      let formerUser = JSON.parse(localStorage.getItem("user"));
       // console.log(formerUser);
       formerUser.user = payload.data;
       state.user = formerUser;
-      localStorage.setItem('user', JSON.stringify(formerUser));
+      localStorage.setItem("user", JSON.stringify(formerUser));
     },
     [updateUser.rejected]: (state, { error }) => {
       state.updateUserError = error;

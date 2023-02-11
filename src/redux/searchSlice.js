@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import config from '../config';
 
 export const searchJobs = createAsyncThunk(
   'search/searchJobs',
@@ -7,7 +8,7 @@ export const searchJobs = createAsyncThunk(
     try {
       const results = await axios({
         method: 'get',
-        url: `https://group-e-jobfinder-api.herokuapp.com/api/v1/jobs?title=${data}`,
+        url: `${config.url}/jobs?title=${data}`,
       });
       return results.data;
     } catch (error) {

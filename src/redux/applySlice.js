@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from "../config";
 
-const baseUrl = 'https://group-e-jobfinder-api.herokuapp.com/api/v1';
+const baseUrl = config.url;
 
 const initialState = {
   application: null,
@@ -14,11 +15,11 @@ const initialState = {
 };
 
 export const apply = createAsyncThunk(
-  'application/apply',
+  "application/apply",
   async ({ data, jobId, token }, { rejectWithValue }) => {
     try {
       const application = await axios({
-        method: 'post',
+        method: "post",
         url: `${baseUrl}/applications/${jobId}`,
         data,
         headers: {
@@ -27,19 +28,19 @@ export const apply = createAsyncThunk(
       });
 
       Swal.fire({
-        icon: 'success',
-        title: 'Done!',
-        text: 'Application Sent',
-        confirmButtonColor: '#E94368',
+        icon: "success",
+        title: "Done!",
+        text: "Application Sent",
+        confirmButtonColor: "#E94368",
       });
 
       return application;
     } catch (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
-        confirmButtonColor: '#E94368',
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        confirmButtonColor: "#E94368",
       });
       return rejectWithValue(error);
     }
@@ -47,15 +48,15 @@ export const apply = createAsyncThunk(
 );
 
 export const getApplicationById = createAsyncThunk(
-  'application/getApplication',
+  "application/getApplication",
   async ({ id, token, type }, { rejectWithValue }) => {
     try {
       let url;
-      type === 'job'
+      type === "job"
         ? (url = `${baseUrl}/applications/${id}`)
         : (url = `${baseUrl}/applications/applicant/${id}`);
       const applications = await axios({
-        method: 'get',
+        method: "get",
         url,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,7 +71,7 @@ export const getApplicationById = createAsyncThunk(
 );
 
 export const applicationSlice = createSlice({
-  name: 'application',
+  name: "application",
   initialState,
 
   extraReducers: {

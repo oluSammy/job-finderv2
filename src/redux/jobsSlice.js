@@ -1,15 +1,16 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import Swal from "sweetalert2";
+import config from "../config";
 
-const baseUrl = 'https://group-e-jobfinder-api.herokuapp.com/api/v1';
+const baseUrl = config.url;
 
 export const getAllJobs = createAsyncThunk(
-  'jobs/getAllJobs',
+  "jobs/getAllJobs",
   async (data, { rejectWithValue }) => {
     try {
       const allJobs = await axios({
-        method: 'get',
+        method: "get",
         url: `${baseUrl}/jobs`,
       });
       return allJobs.data;
@@ -20,11 +21,11 @@ export const getAllJobs = createAsyncThunk(
 );
 
 export const postJob = createAsyncThunk(
-  'jobs/postJob',
+  "jobs/postJob",
   async (data, { rejectWithValue }) => {
     try {
       const newJob = await axios({
-        method: 'post',
+        method: "post",
         url: `${baseUrl}/jobs`,
         data: data.data,
         headers: {
@@ -32,10 +33,10 @@ export const postJob = createAsyncThunk(
         },
       });
       Swal.fire({
-        icon: 'success',
-        title: 'Done!',
-        text: 'Job Added',
-        confirmButtonColor: '#E94368',
+        icon: "success",
+        title: "Done!",
+        text: "Job Added",
+        confirmButtonColor: "#E94368",
         // cancelButtonColor: '#11365F',
       });
       return newJob.data;
@@ -46,11 +47,11 @@ export const postJob = createAsyncThunk(
 );
 
 export const getJobByCategory = createAsyncThunk(
-  'jobs/category',
+  "jobs/category",
   async (data, { rejectWithValue }) => {
     try {
       const jobs = await axios({
-        method: 'get',
+        method: "get",
         url: `${baseUrl}/jobs?category=${data}`,
       });
       return jobs.data;
@@ -61,11 +62,11 @@ export const getJobByCategory = createAsyncThunk(
 );
 
 export const getJobsByAuthor = createAsyncThunk(
-  'jobs/author',
+  "jobs/author",
   async ({ id, token }, { rejectWithValue }) => {
     try {
       const authorJobs = await axios({
-        method: 'get',
+        method: "get",
         url: `${baseUrl}/jobs/employers/${id}`,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,29 +81,27 @@ export const getJobsByAuthor = createAsyncThunk(
 );
 
 export const getJobById = createAsyncThunk(
-  'jobs/getById',
+  "jobs/getById",
   async (id, { rejectWithValue }) => {
     try {
       const job = await axios({
-        method: 'get',
+        method: "get",
         url: `${baseUrl}/jobs/${id}`,
       });
 
       return job.data.data;
     } catch (error) {
-
       return rejectWithValue(error);
     }
   }
 );
 
 export const updateJob = createAsyncThunk(
-  'jobs/update',
+  "jobs/update",
   async ({ id, data, token }, { rejectWithValue }) => {
     try {
-
       const job = await axios({
-        method: 'put',
+        method: "put",
         url: `${baseUrl}/jobs/${id}`,
         data,
         headers: {
@@ -118,11 +117,11 @@ export const updateJob = createAsyncThunk(
 );
 
 export const deleteJob = createAsyncThunk(
-  'jobs/delete',
+  "jobs/delete",
   async ({ id, token }, { rejectWithValue }) => {
     try {
       const deleteJob = await axios({
-        method: 'delete',
+        method: "delete",
         url: `${baseUrl}/jobs/${id}`,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -160,7 +159,7 @@ const initialState = {
 };
 
 export const jobsSlice = createSlice({
-  name: 'jobs',
+  name: "jobs",
   initialState,
 
   extraReducers: {
@@ -222,20 +221,20 @@ export const jobsSlice = createSlice({
       state.updatedJob = payload;
       state.updateJobErr = null;
       Swal.fire({
-        icon: 'success',
-        title: 'Done!',
-        text: 'Job Updated!',
-        confirmButtonColor: '#E94368',
+        icon: "success",
+        title: "Done!",
+        text: "Job Updated!",
+        confirmButtonColor: "#E94368",
       });
     },
     [updateJob.rejected]: (state, { error }) => {
       state.updateJobErr = error;
       state.updatedJob = null;
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
-        confirmButtonColor: '#E94368',
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        confirmButtonColor: "#E94368",
       });
     },
     [deleteJob.pending]: (state) => {
@@ -288,6 +287,6 @@ export const selectUpdateJobErr = (state) => state.jobs.updateJobErr;
 export const selectOneJob = (state) => state.jobs.oneJob;
 export const selectIsGettingOneJob = (state) => state.jobs.isGettingOneJob;
 export const selectIsGettingOneError = (state) => state.jobs.getOneJobError;
-export const selectIsDeletingJobs = (state) => state.jobs.isDeletingJobs
+export const selectIsDeletingJobs = (state) => state.jobs.isDeletingJobs;
 
 export default jobsSlice.reducer;
